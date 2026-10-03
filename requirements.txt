@@ -1,0 +1,8 @@
+﻿pandas
+numpy
+pyarrow
+matplotlib
+PyYAML
+jupyter
+pytest
+ruff

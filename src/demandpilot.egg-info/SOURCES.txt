@@ -1,0 +1,8 @@
+README.md
+pyproject.toml
+src/demandpilot/__init__.py
+src/demandpilot.egg-info/PKG-INFO
+src/demandpilot.egg-info/SOURCES.txt
+src/demandpilot.egg-info/dependency_links.txt
+src/demandpilot.egg-info/top_level.txt
+src/demandpilot/data/__init__.py
