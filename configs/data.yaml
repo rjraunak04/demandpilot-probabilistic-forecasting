@@ -1,24 +1,14 @@
 ﻿dataset:
-  name: "m5_forecasting_accuracy"
-  source: "kaggle"
+  name: online_retail_ii
+  source: uci_machine_learning_repository
+  raw_file: online_retail_II.xlsx
 
 paths:
-  raw_dir: "data/raw/m5"
-  interim_dir: "data/interim"
-  processed_dir: "data/processed"
+  raw_dir: data/raw/online_retail
+  interim_dir: data/interim
+  processed_dir: data/processed
 
-files:
-  calendar: "calendar.csv"
-  prices: "sell_prices.csv"
-  sales: "sales_train_validation.csv"
-
-forecast:
-  grain:
-    - "item_id"
-    - "store_id"
-    - "date"
-  target: "unit_sales"
-  primary_horizon_days: 7
-
-validation:
-  allow_negative_demand: false
+ingestion:
+  sheet_names:
+    - Year 2009-2010
+    - Year 2010-2011

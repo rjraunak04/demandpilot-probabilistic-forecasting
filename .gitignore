@@ -29,3 +29,7 @@ mlruns/
 
 .DS_Store
 Thumbs.db
+
+# Python packaging metadata
+*.egg-info/
+

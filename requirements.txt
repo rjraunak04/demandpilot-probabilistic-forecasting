@@ -1,6 +1,7 @@
 ﻿pandas
 numpy
 pyarrow
+openpyxl
 matplotlib
 PyYAML
 jupyter
