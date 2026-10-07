@@ -75,7 +75,10 @@ def _require_core_identifiers(data: pd.DataFrame) -> None:
 
 def _require_numeric_quantity(data: pd.DataFrame) -> None:
     """Require Quantity to contain numeric values."""
-    converted = pd.to_numeric(data["Quantity"], errors="coerce")
+    converted = pd.to_numeric(
+        data["Quantity"],
+        errors="coerce",
+    )
     invalid = converted.isna() & data["Quantity"].notna()
 
     if invalid.any():
@@ -86,7 +89,10 @@ def _require_numeric_quantity(data: pd.DataFrame) -> None:
 
 def _require_numeric_price(data: pd.DataFrame) -> None:
     """Require Price to contain numeric values."""
-    converted = pd.to_numeric(data["Price"], errors="coerce")
+    converted = pd.to_numeric(
+        data["Price"],
+        errors="coerce",
+    )
     invalid = converted.isna() & data["Price"].notna()
 
     if invalid.any():
@@ -97,7 +103,11 @@ def _require_numeric_price(data: pd.DataFrame) -> None:
 
 def _require_parseable_dates(data: pd.DataFrame) -> None:
     """Require every non-null InvoiceDate value to be parseable."""
-    parsed = pd.to_datetime(data["InvoiceDate"], errors="coerce")
+    parsed = pd.to_datetime(
+        data["InvoiceDate"],
+        errors="coerce",
+        format="mixed",
+    )
     invalid = parsed.isna() & data["InvoiceDate"].notna()
 
     if invalid.any():
@@ -109,10 +119,16 @@ def _require_parseable_dates(data: pd.DataFrame) -> None:
 def _require_source_provenance(data: pd.DataFrame) -> None:
     """Require source-sheet provenance to match configured workbook sheets."""
     if data["SourceSheet"].isna().any():
-        raise DataContractError("SourceSheet contains missing values.")
+        raise DataContractError(
+            "SourceSheet contains missing values."
+        )
 
-    observed = set(data["SourceSheet"].astype(str).unique())
-    unexpected = observed.difference(EXPECTED_SOURCE_SHEETS)
+    observed = set(
+        data["SourceSheet"].astype(str).unique()
+    )
+    unexpected = observed.difference(
+        EXPECTED_SOURCE_SHEETS
+    )
 
     if unexpected:
         raise DataContractError(
@@ -120,7 +136,9 @@ def _require_source_provenance(data: pd.DataFrame) -> None:
         )
 
 
-def validate_retail_data(data: pd.DataFrame) -> ValidationReport:
+def validate_retail_data(
+    data: pd.DataFrame,
+) -> ValidationReport:
     """Validate raw retail data without cleaning or modifying it."""
     _require_non_empty(data)
     _require_columns(data)
@@ -130,8 +148,14 @@ def validate_retail_data(data: pd.DataFrame) -> ValidationReport:
     _require_parseable_dates(data)
     _require_source_provenance(data)
 
-    quantity = pd.to_numeric(data["Quantity"], errors="coerce")
-    price = pd.to_numeric(data["Price"], errors="coerce")
+    quantity = pd.to_numeric(
+        data["Quantity"],
+        errors="coerce",
+    )
+    price = pd.to_numeric(
+        data["Price"],
+        errors="coerce",
+    )
     invoice = data["Invoice"].astype("string")
 
     report = ValidationReport(
@@ -147,14 +171,27 @@ def validate_retail_data(data: pd.DataFrame) -> ValidationReport:
             "source_provenance_valid": True,
         },
         observations={
-            "negative_quantity_rows": int((quantity < 0).sum()),
-            "zero_quantity_rows": int((quantity == 0).sum()),
-            "negative_price_rows": int((price < 0).sum()),
-            "zero_price_rows": int((price == 0).sum()),
-            "cancellation_invoice_rows": int(
-                invoice.str.startswith("C", na=False).sum()
+            "negative_quantity_rows": int(
+                (quantity < 0).sum()
             ),
-            "exact_duplicate_rows": int(data.duplicated().sum()),
+            "zero_quantity_rows": int(
+                (quantity == 0).sum()
+            ),
+            "negative_price_rows": int(
+                (price < 0).sum()
+            ),
+            "zero_price_rows": int(
+                (price == 0).sum()
+            ),
+            "cancellation_invoice_rows": int(
+                invoice.str.startswith(
+                    "C",
+                    na=False,
+                ).sum()
+            ),
+            "exact_duplicate_rows": int(
+                data.duplicated().sum()
+            ),
             "missing_description_rows": int(
                 data["Description"].isna().sum()
             ),
