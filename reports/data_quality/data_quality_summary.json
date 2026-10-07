@@ -1,0 +1,119 @@
+{
+  "dataset": {
+    "rows": 1067371,
+    "columns": 9,
+    "column_names": [
+      "Invoice",
+      "StockCode",
+      "Description",
+      "Quantity",
+      "InvoiceDate",
+      "Price",
+      "Customer ID",
+      "Country",
+      "SourceSheet"
+    ],
+    "memory_mb": 229.84
+  },
+  "temporal": {
+    "date_min": "2009-12-01T07:45:00",
+    "date_max": "2011-12-09T12:50:00",
+    "invalid_invoice_dates": 0,
+    "unique_calendar_days": 604
+  },
+  "cardinality": {
+    "unique_invoices": 53628,
+    "unique_skus": 5305,
+    "unique_customers": 5942,
+    "unique_countries": 43
+  },
+  "missingness": {
+    "Invoice": {
+      "count": 0,
+      "rate": 0.0
+    },
+    "StockCode": {
+      "count": 0,
+      "rate": 0.0
+    },
+    "Description": {
+      "count": 4382,
+      "rate": 0.004105
+    },
+    "Quantity": {
+      "count": 0,
+      "rate": 0.0
+    },
+    "InvoiceDate": {
+      "count": 0,
+      "rate": 0.0
+    },
+    "Price": {
+      "count": 0,
+      "rate": 0.0
+    },
+    "Customer ID": {
+      "count": 243007,
+      "rate": 0.227669
+    },
+    "Country": {
+      "count": 0,
+      "rate": 0.0
+    },
+    "SourceSheet": {
+      "count": 0,
+      "rate": 0.0
+    }
+  },
+  "quantity": {
+    "negative_count": 22950,
+    "zero_count": 0,
+    "positive_count": 1044421,
+    "min": -80995,
+    "max": 80995
+  },
+  "price": {
+    "negative_count": 5,
+    "zero_count": 6202,
+    "positive_count": 1061164,
+    "min": -53594.36,
+    "max": 38970.0
+  },
+  "returns_and_cancellations": {
+    "cancellation_invoice_count": 19494,
+    "negative_quantity_count": 22950,
+    "cancellation_rate": 0.018264
+  },
+  "duplicates": {
+    "exact_duplicate_rows": 12133,
+    "exact_duplicate_rate": 0.011367
+  },
+  "source_sheets": {
+    "Year 2010-2011": 541910,
+    "Year 2009-2010": 525461
+  },
+  "top_countries": {
+    "United Kingdom": 981330,
+    "EIRE": 17866,
+    "Germany": 17624,
+    "France": 14330,
+    "Netherlands": 5140,
+    "Spain": 3811,
+    "Switzerland": 3189,
+    "Belgium": 3123,
+    "Portugal": 2620,
+    "Australia": 1913
+  },
+  "top_skus": {
+    "85123A": 5829,
+    "22423": 4424,
+    "85099B": 4216,
+    "21212": 3318,
+    "20725": 3259,
+    "84879": 2960,
+    "47566": 2768,
+    "21232": 2747,
+    "22197": 2549,
+    "22383": 2540
+  }
+}
