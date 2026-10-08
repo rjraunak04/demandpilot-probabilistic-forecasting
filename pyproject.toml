@@ -7,6 +7,9 @@ name = "demandpilot"
 version = "0.1.0"
 description = "Probabilistic retail demand forecasting and inventory intelligence platform."
 requires-python = ">=3.11"
+dependencies = [
+    "pyarrow>=25.0.0",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]

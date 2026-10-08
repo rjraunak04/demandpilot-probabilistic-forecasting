@@ -1,0 +1,49 @@
+{
+  "artifacts": {
+    "daily_sku_demand": "data/processed/daily_sku_demand.parquet",
+    "forecast_features": "data/processed/forecast_features.parquet",
+    "summary": "reports/data_quality/feature_pipeline_summary.json"
+  },
+  "daily_demand": {
+    "calendar_days": 604,
+    "date_max": "2011-12-09T00:00:00",
+    "date_min": "2009-12-01T00:00:00",
+    "input_transaction_rows": 1032348,
+    "output_daily_rows": 534499,
+    "total_units_input": 11637620.0,
+    "total_units_output": 11637620.0,
+    "unique_skus": 4984
+  },
+  "feature_dataset": {
+    "columns": 26,
+    "date_max": "2011-12-09T00:00:00",
+    "date_min": "2009-12-01T00:00:00",
+    "rows": 2302303,
+    "unique_skus": 4984,
+    "zero_demand_rows": 1767804,
+    "zero_demand_share": 0.7678415916584393
+  },
+  "pipeline": {
+    "complete_history_rows": 2170067,
+    "complete_history_share": 0.9425635982752921,
+    "feature_rows": 2302303,
+    "incomplete_history_rows": 132236,
+    "inserted_zero_rows": 1767804,
+    "lag_days": [
+      1,
+      7,
+      14,
+      28
+    ],
+    "observed_daily_rows": 534499,
+    "panel_rows": 2302303,
+    "prepared_rows": 1032348,
+    "raw_rows": 1067371,
+    "rolling_windows": [
+      7,
+      14,
+      28
+    ],
+    "unique_skus": 4984
+  }
+}
