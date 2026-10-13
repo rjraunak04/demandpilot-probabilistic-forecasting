@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 import pandas as pd
 import pytest
 
@@ -38,7 +36,10 @@ def test_gap_invalidates_window_crossing_gap() -> None:
     data = data.loc[~((data["sku"] == "A") & (data["date"] == "2011-01-05"))]
     examples = build_lead_time_examples(data)
     invalid_starts = pd.date_range("2011-01-01", "2011-01-04", freq="D")
-    assert not examples.loc[(examples["sku"] == "A") & examples["date"].isin(invalid_starts)].shape[0]
+    invalid = examples.loc[
+        (examples["sku"] == "A") & examples["date"].isin(invalid_starts)
+    ]
+    assert invalid.empty
 
 
 def test_skus_do_not_bleed_into_each_other() -> None:
