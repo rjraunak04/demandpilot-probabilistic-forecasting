@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from dataclasses import dataclass
 
 import pandas as pd
@@ -36,17 +38,17 @@ def rolling_origin_folds(
     fold_number = 1
 
     while fold_start <= end:
-        fold_end = fold_start + pd.Timedelta(days=horizon_days - 1)
+        fold_end = fold_start + timedelta(days=horizon_days - 1)
         folds.append(
             BacktestFold(
                 fold=fold_number,
-                train_end=fold_start - pd.Timedelta(days=1),
+                train_end=fold_start - timedelta(days=1),
                 validation_start=fold_start,
                 validation_end=fold_end,
             )
         )
         fold_number += 1
-        fold_start = fold_end + pd.Timedelta(days=1)
+        fold_start = fold_end + timedelta(days=1)
 
     return tuple(folds)
 
