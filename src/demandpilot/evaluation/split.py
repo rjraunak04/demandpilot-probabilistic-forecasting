@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from dataclasses import dataclass
 
 import pandas as pd
@@ -85,10 +87,10 @@ def chronological_split(
     ):
         raise ValueError("Chronological split boundaries overlap or are out of order.")
 
-    if boundaries["validation_start"] != boundaries["train_end"] + pd.Timedelta(days=1):
+    if boundaries["validation_start"] != boundaries["train_end"] + timedelta(days=1):
         raise ValueError("Train and validation periods must be contiguous.")
 
-    if boundaries["test_start"] != boundaries["validation_end"] + pd.Timedelta(days=1):
+    if boundaries["test_start"] != boundaries["validation_end"] + timedelta(days=1):
         raise ValueError("Validation and test periods must be contiguous.")
 
     history_complete = data[list(required_history_columns)].notna().all(axis=1)
