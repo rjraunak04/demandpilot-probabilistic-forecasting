@@ -70,6 +70,9 @@ def snapshot_examples(
     """Return the SKU snapshot predicted at a forecast origin."""
     origin_ts = pd.Timestamp(origin)
     snapshot = examples.loc[examples["date"] == origin_ts].copy()
+    snapshot = snapshot.dropna(subset=list(MODEL_FEATURES))
     if snapshot.empty:
-        raise ValueError(f"No lead-time examples at origin {origin_ts.date()}.")
+        raise ValueError(
+            f"No complete-history lead-time examples at origin {origin_ts.date()}."
+        )
     return snapshot.reset_index(drop=True)
