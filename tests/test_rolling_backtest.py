@@ -30,7 +30,7 @@ def test_fold_boundaries_are_contiguous_and_expanding() -> None:
     folds = rolling_origin_folds()
     assert folds[0].train_end == pd.Timestamp("2011-10-14")
     assert folds[-1].validation_end == pd.Timestamp("2011-11-11")
-    for previous, current in zip(folds, folds[1:], strict=True):
+    for previous, current in zip(folds, folds[1:]):
         assert current.validation_start == previous.validation_end + pd.Timedelta(days=1)
         assert current.train_end == previous.validation_end
 
