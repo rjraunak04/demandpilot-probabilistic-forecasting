@@ -57,6 +57,7 @@ def training_examples_at_origin(
     if missing:
         raise ValueError(f"Missing lead-time example columns: {sorted(missing)}")
     train = examples.loc[examples["target_end"] < origin_ts].copy()
+    train = train.dropna(subset=list(MODEL_FEATURES))
     if train.empty:
         raise ValueError("No completed lead-time labels are available before origin.")
     return train.reset_index(drop=True)
