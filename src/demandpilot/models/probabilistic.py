@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
-from demandpilot.models.boosting import MODEL_FEATURES, feature_matrix
+from demandpilot.models.boosting import feature_matrix
 
 QUANTILES: tuple[float, ...] = (0.1, 0.5, 0.9)
 
@@ -84,8 +84,6 @@ def fit_quantile_forecast(
             raise ValueError("Quantile model produced invalid predictions.")
         predictions[quantile] = raw
 
-    # Rearrangement guarantees coherent operational quantiles even when
-    # independently fitted quantile regressors cross.
     stacked = np.vstack([predictions[q] for q in QUANTILES])
     ordered = np.sort(stacked, axis=0)
     return QuantileForecast(p10=ordered[0], p50=ordered[1], p90=ordered[2])
