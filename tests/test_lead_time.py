@@ -65,3 +65,11 @@ def test_snapshot_is_exact_origin() -> None:
 def test_invalid_horizon_rejected() -> None:
     with pytest.raises(ValueError, match="positive"):
         build_lead_time_examples(_features(), horizon_days=0)
+
+
+def test_training_excludes_incomplete_model_history() -> None:
+    data = _features()
+    data.loc[data.index[0], "lag_28"] = float("nan")
+    examples = build_lead_time_examples(data)
+    train = training_examples_at_origin(examples, "2011-01-20")
+    assert train[list(MODEL_FEATURES)].notna().all().all()
