@@ -1,5 +1,7 @@
 forecast:
   horizon_days: 7
+  target: "lead_time_demand"
+  quantiles: [0.10, 0.50, 0.90]
 
 history:
   required_days: 28
@@ -13,8 +15,17 @@ split:
 
 evaluation:
   primary_metric: "wape"
+  probabilistic_metrics:
+    - pinball_loss
+    - coverage_80
+    - mean_interval_width
   metrics:
     - wape
     - mae
     - rmse
     - smape
+
+inventory:
+  service_quantile: "p90"
+  review_period_days: 7
+  on_hand_source: null
