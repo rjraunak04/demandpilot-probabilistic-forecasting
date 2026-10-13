@@ -1,8 +1,7 @@
 """Tests for forecasting feature artifact materialization."""
 
-from datetime import timedelta
-
 import json
+from datetime import timedelta
 from pathlib import Path
 
 import pandas as pd
