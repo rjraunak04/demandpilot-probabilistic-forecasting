@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import numpy as np
 import pandas as pd
 
 from demandpilot.evaluation.backtesting import rolling_origin_folds
