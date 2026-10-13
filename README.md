@@ -87,3 +87,21 @@ The locked test set remains untouched at model-selection time.
 Generated benchmark CSV/JSON outputs under `reports/modeling/` are reproducible
 runtime artifacts and are intentionally excluded from version control. The
 evaluation logic, tests, configuration, and methodology remain versioned.
+
+
+## Probabilistic Forecasting & Inventory Intelligence — Day 04
+
+The operational forecasting target is a horizon-safe **7-day lead-time demand**
+total. At each weekly forecast origin, features use only information available
+before the origin and the target covers the following seven days.
+
+Demand uncertainty is modeled with LightGBM quantile regression at **P10, P50,
+and P90**. Evaluation includes pinball loss, median-forecast WAPE, empirical 80%
+interval coverage, and interval width.
+
+Inventory policy is deliberately auditable: P90 represents a service-oriented
+target-stock scenario and P90-P50 is an uncertainty-derived safety-stock proxy.
+Because Online Retail II does not provide a trustworthy current inventory
+ledger, DemandPilot never fabricates on-hand stock or executable reorder
+quantities. Those actions become available only when real on-hand inventory is
+supplied.
