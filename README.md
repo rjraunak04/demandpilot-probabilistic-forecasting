@@ -105,3 +105,9 @@ Because Online Retail II does not provide a trustworthy current inventory
 ledger, DemandPilot never fabricates on-hand stock or executable reorder
 quantities. Those actions become available only when real on-hand inventory is
 supplied.
+
+
+**Verified Day-04 validation:** 11,427 SKU-origin forecasts across four weekly
+origins; mean P50 WAPE **0.601275** versus **0.772276** for the seasonal 7-day
+baseline (~**22.1%** relative improvement). The P10-P90 interval achieved
+**84.44%** empirical coverage. The locked test remains untouched.
