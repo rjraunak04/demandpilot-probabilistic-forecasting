@@ -58,3 +58,24 @@ chain cost function.
 The locked test period remains untouched during Day-04 model development.
 Probabilistic validation uses the four weekly origins inside the existing
 validation window.
+
+
+## Verified validation results
+
+The Day-04 pipeline was verified across four weekly fixed-origin forecasts with
+the locked test still untouched.
+
+| Origin | Forecast rows | P50 WAPE | Seasonal 7d WAPE | 80% coverage | Mean interval width |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 2011-10-15 | 2,888 | 0.594846 | 0.704362 | 84.14% | 86.05 |
+| 2011-10-22 | 2,883 | 0.624645 | 0.905586 | 84.70% | 71.23 |
+| 2011-10-29 | 2,846 | 0.614509 | 0.778047 | 84.61% | 83.65 |
+| 2011-11-05 | 2,810 | 0.571101 | 0.701109 | 84.31% | 104.94 |
+
+Across 11,427 SKU-origin forecasts, mean P50 WAPE was **0.601275** versus
+**0.772276** for the previous-seven-day seasonal total baseline, a relative
+improvement of approximately **22.1%**. Mean empirical coverage of the nominal
+P10-P90 interval was **84.44%**.
+
+These are validation results, not locked-test claims. Reorder quantities remain
+scenario-only until real on-hand inventory is supplied.
