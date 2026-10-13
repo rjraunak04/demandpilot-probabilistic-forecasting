@@ -1,5 +1,7 @@
 """Integration tests for the complete forecasting feature pipeline."""
 
+from datetime import timedelta
+
 import pandas as pd
 import pytest
 
@@ -42,7 +44,7 @@ def make_raw_transactions() -> pd.DataFrame:
                         else day_index + 101
                     ),
                     "InvoiceDate": (
-                        date + pd.Timedelta(hours=10)
+                        date + timedelta(hours=10)
                     ),
                     "Price": 2.5,
                     "Customer ID": 1000 + sku_index,
