@@ -73,3 +73,13 @@ def test_training_excludes_incomplete_model_history() -> None:
     examples = build_lead_time_examples(data)
     train = training_examples_at_origin(examples, "2011-01-20")
     assert train[list(MODEL_FEATURES)].notna().all().all()
+
+
+def test_snapshot_excludes_incomplete_model_history() -> None:
+    data = _features()
+    mask = (data["sku"] == "A") & (data["date"] == pd.Timestamp("2011-01-20"))
+    data.loc[mask, "rolling_mean_28"] = float("nan")
+    examples = build_lead_time_examples(data)
+    snapshot = snapshot_examples(examples, "2011-01-20")
+    assert set(snapshot["sku"]) == {"B"}
+    assert snapshot[list(MODEL_FEATURES)].notna().all().all()
