@@ -3,6 +3,7 @@
 import tempfile
 from pathlib import Path
 
+import mlflow
 from fastapi.testclient import TestClient
 
 from demandpilot.api.app import app
@@ -10,13 +11,15 @@ from demandpilot.tracking.mlflow import configure_mlflow, log_metrics, tracked_r
 
 
 def main() -> None:
-    with tempfile.TemporaryDirectory() as directory:
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as directory:
         configure_mlflow(
             str(Path(directory) / "mlruns"),
             "demandpilot-day05",
         )
         with tracked_run("verify", params={"horizon": 7}):
             log_metrics({"wape": 0.601275})
+        mlflow.end_run()
+        mlflow.set_tracking_uri("")
 
     client = TestClient(app)
     assert client.get("/health").status_code == 200
