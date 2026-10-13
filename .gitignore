@@ -37,3 +37,4 @@ Thumbs.db
 # Generated modeling benchmark outputs
 reports/modeling/*.csv
 reports/modeling/*.json
+reports/modeling/*.parquet
