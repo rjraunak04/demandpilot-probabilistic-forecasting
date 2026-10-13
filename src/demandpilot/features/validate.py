@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import timedelta
 import pandas as pd
 
 from demandpilot.features.lags import DEFAULT_LAGS
@@ -141,7 +142,7 @@ def validate_forecasting_features(
 
     invalid_gap = (
         date_diff.notna()
-        & date_diff.ne(pd.Timedelta(days=1))
+        & date_diff.ne(timedelta(days=1))
     )
 
     if invalid_gap.any():
