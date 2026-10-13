@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
 from collections.abc import Sequence
 from dataclasses import dataclass
+from datetime import timedelta
 from typing import Any
 
 import pandas as pd
