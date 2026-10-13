@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import timedelta
+
 import pandas as pd
 
 from demandpilot.features.lags import DEFAULT_LAGS
