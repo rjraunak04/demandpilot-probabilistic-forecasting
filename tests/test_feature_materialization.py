@@ -1,5 +1,7 @@
 """Tests for forecasting feature artifact materialization."""
 
+from datetime import timedelta
+
 import json
 from pathlib import Path
 
@@ -40,7 +42,7 @@ def make_raw_transactions() -> pd.DataFrame:
                     "Description": f"{sku} product",
                     "Quantity": day_index + sku_index + 1,
                     "InvoiceDate": (
-                        date + pd.Timedelta(hours=10)
+                        date + timedelta(hours=10)
                     ),
                     "Price": 2.5,
                     "Customer ID": 1000 + sku_index,
