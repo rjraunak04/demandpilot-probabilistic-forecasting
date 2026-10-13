@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import timedelta
 from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Any
@@ -168,7 +169,7 @@ def add_temporal_features(
 
     invalid_gap = (
         date_diff.notna()
-        & date_diff.ne(pd.Timedelta(days=1))
+        & date_diff.ne(timedelta(days=1))
     )
 
     if invalid_gap.any():
