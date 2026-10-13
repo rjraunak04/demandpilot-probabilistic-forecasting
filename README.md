@@ -66,3 +66,24 @@ Streamlit Dashboard
         |
         v
 Monitoring + CI/CD + Deployment
+
+## Forecasting Benchmark — Day 03
+
+DemandPilot uses chronological evaluation rather than random train/test splits.
+
+- Training ends: **2011-10-14**
+- Validation: **2011-10-15 to 2011-11-11**
+- Locked test: **2011-11-12 to 2011-12-09**
+- Primary metric: **WAPE**
+- Supporting metrics: MAE, RMSE, sMAPE
+- Rolling-origin validation: four non-overlapping 7-day folds
+- Models: last-value naive, seasonal naive, LightGBM, XGBoost
+- Hyperparameter search: limited, time-aware Optuna tuning using training data only
+
+The selected Day-03 champion is **LightGBM** with validation WAPE **0.860410**,
+a **29.75%** improvement over the seasonal-naive WAPE of **1.224818**.
+The locked test set remains untouched at model-selection time.
+
+Generated benchmark CSV/JSON outputs under `reports/modeling/` are reproducible
+runtime artifacts and are intentionally excluded from version control. The
+evaluation logic, tests, configuration, and methodology remain versioned.

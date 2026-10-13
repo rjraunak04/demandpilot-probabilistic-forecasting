@@ -33,3 +33,7 @@ Thumbs.db
 # Python packaging metadata
 *.egg-info/
 
+
+# Generated modeling benchmark outputs
+reports/modeling/*.csv
+reports/modeling/*.json
