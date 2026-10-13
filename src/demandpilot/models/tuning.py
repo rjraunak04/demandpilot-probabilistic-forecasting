@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
@@ -31,9 +33,9 @@ def _tuning_window(
     data = train.copy()
     data["date"] = pd.to_datetime(data["date"], errors="raise")
     validation_end = data["date"].max()
-    validation_start = validation_end - pd.Timedelta(days=validation_days - 1)
-    training_end = validation_start - pd.Timedelta(days=1)
-    training_start = training_end - pd.Timedelta(days=training_days - 1)
+    validation_start = validation_end - timedelta(days=validation_days - 1)
+    training_end = validation_start - timedelta(days=1)
+    training_start = training_end - timedelta(days=training_days - 1)
 
     fit = data.loc[data["date"].between(training_start, training_end)].copy()
     validation = data.loc[data["date"].between(validation_start, validation_end)].copy()
