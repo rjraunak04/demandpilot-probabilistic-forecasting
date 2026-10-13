@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import timedelta
 from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Any
@@ -169,7 +170,7 @@ def add_demand_lags(
         .diff()
     )
 
-    expected_step = pd.Timedelta(days=1)
+    expected_step = timedelta(days=1)
 
     invalid_gap = (
         date_diff.notna()
