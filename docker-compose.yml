@@ -1,0 +1,33 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: demandpilot
+      POSTGRES_USER: demandpilot
+      POSTGRES_PASSWORD: demandpilot
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U demandpilot -d demandpilot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    environment:
+      DEMANDPILOT_DATABASE_URL: postgresql+psycopg://demandpilot:demandpilot@postgres:5432/demandpilot
+    ports: ["8000:8000"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "python scripts/init_database.py && uvicorn demandpilot.api.app:app --host 0.0.0.0 --port 8000"
+  dashboard:
+    build:
+      context: .
+      dockerfile: docker/dashboard.Dockerfile
+    ports: ["8501:8501"]
+    depends_on: [api]
+volumes:
+  postgres_data:
