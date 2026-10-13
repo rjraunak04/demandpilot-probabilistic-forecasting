@@ -1,0 +1,20 @@
+forecast:
+  horizon_days: 7
+
+history:
+  required_days: 28
+
+split:
+  train_end: "2011-10-14"
+  validation_start: "2011-10-15"
+  validation_end: "2011-11-11"
+  test_start: "2011-11-12"
+  test_end: "2011-12-09"
+
+evaluation:
+  primary_metric: "wape"
+  metrics:
+    - wape
+    - mae
+    - rmse
+    - smape
