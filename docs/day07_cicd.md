@@ -30,3 +30,16 @@ A release candidate is acceptable only when:
 
 Repository branch protection can require the CI checks before merging to
 `main`.
+
+## CP-02: deployment and runtime hardening
+
+The API and dashboard runtime images now execute as an unprivileged `demandpilot`
+user and use unbuffered Python logging. `.env.example` documents local database
+configuration without storing real credentials. The deployment contract in
+`docs/deployment.md` defines health/readiness smoke tests and clearly separates
+the repository's deployable container contract from cloud-specific production
+claims.
+
+CP-02 intentionally does not pretend that a public cloud deployment exists.
+TLS, authentication, backups, autoscaling, platform observability, and secret
+rotation belong to the selected deployment environment.
