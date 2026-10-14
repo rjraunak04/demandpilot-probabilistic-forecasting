@@ -2,127 +2,205 @@
 
 **Production-Grade Probabilistic Retail Demand Forecasting & Inventory Intelligence Platform**
 
-DemandPilot is an end-to-end machine learning system designed to transform
-historical retail transactions into probabilistic demand forecasts and
-inventory decision support.
+DemandPilot is an end-to-end ML engineering project that turns historical
+retail transactions into leakage-safe seven-day probabilistic SKU forecasts,
+inventory decision support, production APIs, monitoring, and reproducible
+containerized services.
 
-The project is being developed as a production-oriented forecasting platform,
-not only as a modeling notebook.
+## Why this project exists
 
-## Business Problem
+Retail teams need more than a point forecast. They need to understand expected
+demand, uncertainty, stockout exposure, and how a model behaves after
+deployment. DemandPilot therefore treats forecasting as a complete ML system:
+data contracts, chronological evaluation, uncertainty, serving, persistence,
+monitoring, CI, and deployment boundaries are all first-class components.
 
-Retail demand is uncertain and changes over time. Poor demand estimates can
-lead to:
+## Verified result
 
-- stockouts and lost sales
-- excess inventory
-- unnecessary holding costs
-- inefficient replenishment decisions
+The Day-04 validation benchmark contains **11,427 SKU-origin forecasts** across
+four weekly origins. The selected probabilistic LightGBM model achieved **P50
+WAPE 0.601275**, compared with **0.772276** for the seasonal seven-day baseline
+(about **22.1% relative improvement**). The P10-P90 interval achieved **84.44%
+empirical coverage**.
 
-DemandPilot is designed to answer four core business questions:
+These are validation results. The locked test window remains outside model
+selection and is not presented as production performance.
 
-1. What demand should be expected for each SKU?
-2. Which products are at risk of stockout?
-3. How much inventory should be reordered?
-4. How uncertain is the demand forecast?
-
-## System Vision
-
-The planned end-to-end workflow is:
+## Architecture
 
 ```text
-Raw Retail Transactions
+UCI Online Retail II
         |
         v
-Data Ingestion
+Ingestion + data contracts
         |
         v
-Data Validation & Quality Contracts
+SKU x day demand panel
         |
         v
-Daily SKU Demand Construction
+Leakage-safe lag / rolling features
         |
         v
-Leakage-Safe Feature Engineering
+Chronological backtesting
+        |
+        +--> naive + seasonal baselines
+        +--> LightGBM / XGBoost
         |
         v
-Time-Series Backtesting
+7-day LightGBM quantile forecasting
+      P10 / P50 / P90
         |
         v
-Baseline + Gradient Boosting Models
+PostgreSQL forecast store
+        |
+   +----+------------------+
+   |                       |
+FastAPI              Inventory policy
+   |                  P90 target stock
+   v
+Streamlit
         |
         v
-Probabilistic Forecasting
-     P10 / P50 / P90
+PSI monitoring -> stable / watch / drift
         |
         v
-Inventory Intelligence
-        |
-        v
-MLflow + PostgreSQL + FastAPI
-        |
-        v
-Streamlit Dashboard
-        |
-        v
-Monitoring + CI/CD + Deployment
+investigate before retraining
 
-## Forecasting Benchmark — Day 03
+MLflow: experiment tracking
+Docker Compose: Postgres + MLflow + API + Dashboard
+GitHub Actions: lint + tests + compile + container contract
+```
 
-DemandPilot uses chronological evaluation rather than random train/test splits.
+Detailed design: `docs/architecture.md`.
 
-- Training ends: **2011-10-14**
-- Validation: **2011-10-15 to 2011-11-11**
-- Locked test: **2011-11-12 to 2011-12-09**
-- Primary metric: **WAPE**
-- Supporting metrics: MAE, RMSE, sMAPE
-- Rolling-origin validation: four non-overlapping 7-day folds
-- Models: last-value naive, seasonal naive, LightGBM, XGBoost
-- Hyperparameter search: limited, time-aware Optuna tuning using training data only
+## ML methodology
 
-The selected Day-03 champion is **LightGBM** with validation WAPE **0.860410**,
-a **29.75%** improvement over the seasonal-naive WAPE of **1.224818**.
-The locked test set remains untouched at model-selection time.
+The operational target is total SKU demand over the next seven days. Features
+at every forecast origin use only prior observations. Model selection is
+chronological rather than randomly split.
 
-Generated benchmark CSV/JSON outputs under `reports/modeling/` are reproducible
-runtime artifacts and are intentionally excluded from version control. The
-evaluation logic, tests, configuration, and methodology remain versioned.
+DemandPilot evaluates simple baselines before gradient boosting. The final
+probabilistic layer uses LightGBM quantile regression for P10, P50, and P90.
+P50 is the central forecast; P10-P90 exposes uncertainty. P90 is used as a
+service-oriented target-stock scenario only when real on-hand inventory is
+provided.
 
+The dataset has no trustworthy current inventory ledger, so the project never
+fabricates on-hand stock or executable replenishment actions.
 
-## Probabilistic Forecasting & Inventory Intelligence — Day 04
+## Production and MLOps layer
 
-The operational forecasting target is a horizon-safe **7-day lead-time demand**
-total. At each weekly forecast origin, features use only information available
-before the origin and the target covers the following seven days.
+- **FastAPI** — forecast persistence/retrieval and inventory recommendation API
+- **PostgreSQL** — forecast persistence and readiness dependency
+- **MLflow** — experiment tracking infrastructure
+- **Streamlit** — forecast, inventory, and drift decision interface
+- **Docker Compose** — reproducible four-service integration environment
+- **PSI monitoring** — deterministic stable/watch/drift feature status
+- **Drift gate** — explicit operational action; no blind auto-retraining
+- **GitHub Actions** — Python 3.11/3.12 quality matrix, tests, compilation,
+  Compose validation, and API/dashboard image builds
+- **Non-root runtime images** — hardened API and dashboard containers
 
-Demand uncertainty is modeled with LightGBM quantile regression at **P10, P50,
-and P90**. Evaluation includes pinball loss, median-forecast WAPE, empirical 80%
-interval coverage, and interval width.
+## Evaluation design
 
-Inventory policy is deliberately auditable: P90 represents a service-oriented
-target-stock scenario and P90-P50 is an uncertainty-derived safety-stock proxy.
-Because Online Retail II does not provide a trustworthy current inventory
-ledger, DemandPilot never fabricates on-hand stock or executable reorder
-quantities. Those actions become available only when real on-hand inventory is
-supplied.
+| Stage | Contract |
+| --- | --- |
+| Train end | 2011-10-14 |
+| Validation | 2011-10-15 to 2011-11-11 |
+| Locked test | 2011-11-12 to 2011-12-09 |
+| Operational horizon | next 7 days |
+| Primary point metric | WAPE |
+| Uncertainty outputs | P10 / P50 / P90 |
+| Interval metric | empirical P10-P90 coverage |
 
+Earlier Day-03 daily-row modeling is retained as diagnostic model-development
+evidence; Day-04's fixed-origin seven-day target is the operational forecasting
+contract.
 
-**Verified Day-04 validation:** 11,427 SKU-origin forecasts across four weekly
-origins; mean P50 WAPE **0.601275** versus **0.772276** for the seasonal 7-day
-baseline (~**22.1%** relative improvement). The P10-P90 interval achieved
-**84.44%** empirical coverage. The locked test remains untouched.
+## Monitoring policy
 
+Numeric drift uses reference-quantile PSI:
 
-## Production Serving & Monitoring — Days 05–06
+- **stable:** PSI < 0.10
+- **watch:** 0.10 <= PSI < 0.25
+- **drift:** PSI >= 0.25
 
-DemandPilot now includes a production-oriented serving and operations layer:
+A drift signal triggers investigation and fresh backtest review. It does not
+automatically retrain or promote a replacement model.
 
-- FastAPI forecast and inventory-decision endpoints
-- PostgreSQL forecast persistence with readiness checks
-- MLflow experiment infrastructure
-- Streamlit forecast, inventory, and drift views
-- Docker Compose orchestration for PostgreSQL, MLflow, FastAPI, and Streamlit
-- deterministic PSI monitoring with stable/watch/drift thresholds
-- explicit drift alert actions and a scheduler-friendly drift gate
+## Run locally
 
-The monitoring policy does **not** automatically retrain on drift. A drift signal starts investigation and backtest review before any replacement model is promoted. CI/CD and deployment hardening remain Day-07 work.
+Prerequisites: Docker Desktop with Compose.
+
+```bash
+git clone <repository-url>
+cd demandpilot-probabilistic-forecasting
+docker compose up -d --build
+```
+
+Local services:
+
+- API: `http://localhost:8000`
+- API docs: `http://localhost:8000/docs`
+- MLflow: `http://localhost:5000`
+- Dashboard: `http://localhost:8501`
+
+For local credentials, copy `.env.example` and replace the example password.
+Do not commit real credentials.
+
+## Quality gates
+
+```bash
+python -m ruff check .
+python -m pytest -q
+python -m compileall -q src scripts dashboard
+docker compose config --quiet
+```
+
+The accepted Day-07 baseline contains **200 passing tests** with one known
+non-blocking SQLAlchemy/MLflow deprecation warning. CI independently executes
+the repository quality and container contract on supported merge targets.
+
+## Repository guide
+
+| Area | Purpose |
+| --- | --- |
+| `src/demandpilot/data` | ingestion, validation, daily demand |
+| `src/demandpilot/features` | leakage-safe feature engineering |
+| `src/demandpilot/models` | baselines, training, probabilistic models |
+| `src/demandpilot/inventory` | uncertainty-aware inventory policy |
+| `src/demandpilot/db` | persistence layer |
+| `src/demandpilot/api` | serving API |
+| `src/demandpilot/monitoring` | drift reports and alert policy |
+| `dashboard` | Streamlit interface |
+| `tests` | automated quality contracts |
+| `docs` | architecture, model card, deployment, operations |
+
+See `docs/repository_map.md` for the full map.
+
+## Engineering documentation
+
+- `docs/architecture.md` — end-to-end architecture and boundaries
+- `docs/model_card.md` — intended use, evidence, risks, and governance
+- `docs/deployment.md` — runtime/deployment contract
+- `docs/day06_monitoring.md` — drift methodology
+- `docs/day06_operations.md` — monitoring operations
+- `docs/day07_cicd.md` — CI/CD and release hardening
+- `docs/release_checklist.md` — final acceptance criteria
+
+## Limitations
+
+This repository is a production-oriented engineering demonstration, not a claim
+of a live commercial deployment. The source dataset is historical. A real
+production rollout would additionally require retailer-specific features,
+current inventory and lead-time data, authentication/authorization, TLS,
+managed secrets, backups, autoscaling, platform observability, and business
+approval workflows.
+
+## Project status
+
+**Days 01-07 implemented.** The repository now covers data engineering,
+leakage-safe forecasting, probabilistic uncertainty, inventory intelligence,
+experiment tracking, persistence, API serving, dashboarding, drift monitoring,
+CI, and deployment hardening. Final release acceptance is documented in
+`docs/release_checklist.md`.
