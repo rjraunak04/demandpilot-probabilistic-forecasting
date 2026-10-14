@@ -1,0 +1,10 @@
+﻿pandas
+numpy
+pyarrow
+openpyxl
+matplotlib
+PyYAML
+jupyter
+pytest
+pytest-cov
+ruff

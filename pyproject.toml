@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "demandpilot"
+version = "0.1.0"
+description = "Probabilistic retail demand forecasting and inventory intelligence platform."
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115,<1",
+    "httpx2>=2,<3",
+    "lightgbm>=4.5,<5",
+    "mlflow>=3,<4",
+    "numpy>=2.0,<3",
+    "openpyxl>=3.1,<4",
+    "optuna>=4,<5",
+    "pandas>=2.2,<3",
+    "psycopg[binary]>=3.2,<4",
+    "pyarrow>=18,<26",
+    "pydantic>=2.9,<3",
+    "PyYAML>=6,<7",
+    "scikit-learn>=1.5,<2",
+    "sqlalchemy>=2.0,<3",
+    "streamlit>=1.50,<2",
+    "uvicorn[standard]>=0.32,<1",
+    "xgboost>=2.1,<4",
+]
+
+[project.optional-dependencies]
+monitoring = ["evidently>=0.7,<1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra --strict-markers"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]

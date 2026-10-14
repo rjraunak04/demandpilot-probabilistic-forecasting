@@ -1,0 +1,20 @@
+forecasting:
+  grain:
+    entity: StockCode
+    time: day
+    target: demand
+
+  horizon_days: 7
+
+transaction_preparation:
+  remove_exact_duplicates: true
+  exclude_cancellation_invoices: true
+  exclude_non_positive_quantity: true
+  require_stock_code: true
+  require_invoice_date: true
+
+  # Price is not used to define whether a transaction represents unit demand.
+  # Zero/negative prices are retained at this stage and remain auditable.
+
+product_eligibility:
+  exclude_blank_stock_codes: true

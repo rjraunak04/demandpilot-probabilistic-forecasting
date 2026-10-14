@@ -1,0 +1,14 @@
+﻿dataset:
+  name: online_retail_ii
+  source: uci_machine_learning_repository
+  raw_file: online_retail_II.xlsx
+
+paths:
+  raw_dir: data/raw/online_retail
+  interim_dir: data/interim
+  processed_dir: data/processed
+
+ingestion:
+  sheet_names:
+    - Year 2009-2010
+    - Year 2010-2011
