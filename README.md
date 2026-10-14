@@ -111,3 +111,18 @@ supplied.
 origins; mean P50 WAPE **0.601275** versus **0.772276** for the seasonal 7-day
 baseline (~**22.1%** relative improvement). The P10-P90 interval achieved
 **84.44%** empirical coverage. The locked test remains untouched.
+
+
+## Production Serving & Monitoring — Days 05–06
+
+DemandPilot now includes a production-oriented serving and operations layer:
+
+- FastAPI forecast and inventory-decision endpoints
+- PostgreSQL forecast persistence with readiness checks
+- MLflow experiment infrastructure
+- Streamlit forecast, inventory, and drift views
+- Docker Compose orchestration for PostgreSQL, MLflow, FastAPI, and Streamlit
+- deterministic PSI monitoring with stable/watch/drift thresholds
+- explicit drift alert actions and a scheduler-friendly drift gate
+
+The monitoring policy does **not** automatically retrain on drift. A drift signal starts investigation and backtest review before any replacement model is promoted. CI/CD and deployment hardening remain Day-07 work.
