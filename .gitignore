@@ -39,3 +39,6 @@ Thumbs.db
 reports/modeling/*.csv
 reports/modeling/*.json
 reports/modeling/*.parquet
+
+# Generated drift monitoring reports
+reports/monitoring/
