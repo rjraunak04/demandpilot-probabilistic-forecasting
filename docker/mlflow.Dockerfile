@@ -2,16 +2,11 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Keep MLflow tracking-server runtime explicit and lightweight. mlflow-skinny
-# provides the CLI/core client, while Flask/Uvicorn/SQLAlchemy supply the
-# server and SQLite-backed tracking-store dependencies. Training libraries
-# intentionally stay out of this image.
-RUN pip install --no-cache-dir \
-    "mlflow-skinny>=3,<4" \
-    "flask>=3,<4" \
-    "sqlalchemy>=2,<3" \
-    "uvicorn>=0.32,<1"
+# Install the complete MLflow tracking server distribution, not mlflow-skinny.
+# The full distribution resolves the server, SQL store, migration, and UI
+# dependencies together. No DemandPilot training package is installed here.
+RUN pip install --no-cache-dir "mlflow>=3,<4"
 
 EXPOSE 5000
 
-CMD ["mlflow", "server", "--host", "0.0.0.0", "--port", "5000", "--backend-store-uri", "sqlite:////mlflow/mlflow.db", "--artifacts-destination", "/mlflow/artifacts"]
+CMD ["mlflow", "server", "--host", "0.0.0.0", "--port", "5000", "--workers", "1", "--backend-store-uri", "sqlite:////mlflow/mlflow.db", "--artifacts-destination", "/mlflow/artifacts"]
