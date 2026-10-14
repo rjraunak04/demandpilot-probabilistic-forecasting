@@ -9,6 +9,7 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from api_client import APIError, get_forecast, health, inventory_recommendation  # noqa: E402
 
+from demandpilot.monitoring.alerts import evaluate_drift_alert  # noqa: E402
 from demandpilot.monitoring.report import summarize_drift  # noqa: E402
 
 st.set_page_config(page_title="DemandPilot", layout="wide")
@@ -86,7 +87,14 @@ with drift_tab:
             selected = st.multiselect("Compare features", common, default=common)
             if selected:
                 report = summarize_drift(reference, current, columns=selected)
+                alert = evaluate_drift_alert(report)
                 st.metric("Drift status", report["overall_status"].upper())
+                if alert.severity == "critical":
+                    st.error(f"{alert.message} Action: {alert.action}.")
+                elif alert.severity == "warning":
+                    st.warning(f"{alert.message} Action: {alert.action}.")
+                else:
+                    st.success(alert.message)
                 st.dataframe(pd.DataFrame(report["features"]), use_container_width=True)
                 st.download_button("Download JSON report", json.dumps(report, indent=2),
                                    file_name="demandpilot_drift.json", mime="application/json")
