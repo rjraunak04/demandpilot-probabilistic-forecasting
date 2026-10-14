@@ -19,7 +19,7 @@ Local Compose credentials are configurable through `POSTGRES_DB`, `POSTGRES_USER
 
 ## Monitoring boundary
 
-The current monitoring module implements deterministic PSI-based numeric feature drift with stable/watch/drift thresholds. It is intentionally lightweight and testable without external infrastructure. A richer report layer can be added independently without changing the serving contract.
+The current monitoring module implements deterministic PSI-based numeric feature drift with stable/watch/drift thresholds. It is intentionally lightweight and testable without external infrastructure. CP-04 adds JSON drift summaries, optional Evidently HTML, and a Streamlit drift tab. See [day06_monitoring.md](day06_monitoring.md).
 
 ## Local verification
 
