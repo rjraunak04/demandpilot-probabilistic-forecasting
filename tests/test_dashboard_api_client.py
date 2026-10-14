@@ -27,7 +27,9 @@ def test_health_client():
 
 
 def test_inventory_client_posts_contract():
-    with patch("dashboard.api_client.urlopen", return_value=Response({"reorder_quantity": 8})) as call:
+    with patch(
+        "dashboard.api_client.urlopen", return_value=Response({"reorder_quantity": 8})
+    ) as call:
         result = inventory_recommendation(10, 15, 20, 12)
         assert result["reorder_quantity"] == 8
         request = call.call_args.args[0]
