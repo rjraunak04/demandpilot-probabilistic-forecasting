@@ -13,7 +13,10 @@ def summarize_drift(reference: pd.DataFrame, current: pd.DataFrame, columns=None
     if reference.empty or current.empty:
         raise ValueError("reference and current must be non-empty")
     if columns is None:
-        columns = sorted(\n            set(reference.select_dtypes("number"))\n            & set(current.select_dtypes("number"))\n        )
+        columns = sorted(
+            set(reference.select_dtypes("number"))
+            & set(current.select_dtypes("number"))
+        )
     if not columns or len(columns) != len(set(columns)):
         raise ValueError("select at least one unique numeric column")
     missing = set(columns) - (set(reference) & set(current))
@@ -40,7 +43,8 @@ def save_summary(summary, path):
     """Persist JSON artifact."""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(summary, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+    path.write_text(json.dumps(summary, indent=2, allow_nan=False) + "
+", encoding="utf-8")
     return path
 
 
