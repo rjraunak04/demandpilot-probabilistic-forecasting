@@ -7,8 +7,8 @@ import pandas as pd
 import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from demandpilot.monitoring.report import summarize_drift  # noqa: E402
 from api_client import APIError, get_forecast, health, inventory_recommendation  # noqa: E402
+from demandpilot.monitoring.report import summarize_drift  # noqa: E402
 
 st.set_page_config(page_title="DemandPilot", layout="wide")
 st.title("DemandPilot — Demand & Inventory Intelligence")
@@ -47,7 +47,9 @@ with forecast_tab:
 
 with inventory_tab:
     st.subheader("Live inventory decision")
-    st.caption("Reads a stored forecast from FastAPI/PostgreSQL, then calls the inventory policy API.")
+    st.caption(
+        "Reads a stored forecast from FastAPI/PostgreSQL, then calls the inventory policy API."
+    )
     sku_live = st.text_input("SKU", key="live_sku")
     date_live = st.date_input("Forecast date", key="live_date")
     on_hand = st.number_input("On-hand units", min_value=0.0, value=0.0)
