@@ -1,6 +1,6 @@
 """Numeric PSI monitoring reports and optional Evidently HTML export."""
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pandas as pd
@@ -13,7 +13,7 @@ def summarize_drift(reference: pd.DataFrame, current: pd.DataFrame, columns=None
     if reference.empty or current.empty:
         raise ValueError("reference and current must be non-empty")
     if columns is None:
-        columns = sorted(set(reference.select_dtypes("number")) & set(current.select_dtypes("number")))
+        columns = sorted(\n            set(reference.select_dtypes("number"))\n            & set(current.select_dtypes("number"))\n        )
     if not columns or len(columns) != len(set(columns)):
         raise ValueError("select at least one unique numeric column")
     missing = set(columns) - (set(reference) & set(current))
@@ -30,7 +30,7 @@ def summarize_drift(reference: pd.DataFrame, current: pd.DataFrame, columns=None
                          "reference_count": len(ref), "current_count": len(cur)})
     counts = {s: sum(f["status"] == s for f in features) for s in ("stable", "watch", "drift")}
     overall = "drift" if counts["drift"] else "watch" if counts["watch"] else "stable"
-    return {"schema_version": "1.0", "created_at_utc": datetime.now(timezone.utc).isoformat(),
+    return {"schema_version": "1.0", "created_at_utc": datetime.now(UTC).isoformat(),
             "reference_rows": len(reference), "current_rows": len(current),
             "overall_status": overall, "counts": counts, "features": features,
             "method": "reference-quantile PSI", "thresholds": {"watch": 0.1, "drift": 0.25}}
