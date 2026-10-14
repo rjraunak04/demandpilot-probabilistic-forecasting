@@ -43,3 +43,11 @@ claims.
 CP-02 intentionally does not pretend that a public cloud deployment exists.
 TLS, authentication, backups, autoscaling, platform observability, and secret
 rotation belong to the selected deployment environment.
+
+## CP-03 to CP-08: release documentation and acceptance
+
+The final documentation layer includes the system architecture, model card,
+repository map, deployment contract, and release acceptance checklist. These
+artifacts make the ML boundary, serving boundary, monitoring policy, limitations,
+and release evidence explicit. The README is the recruiter-facing entry point;
+the detailed documents remain the engineering source of truth.
