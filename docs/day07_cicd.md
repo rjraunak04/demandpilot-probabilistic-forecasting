@@ -44,10 +44,36 @@ CP-02 intentionally does not pretend that a public cloud deployment exists.
 TLS, authentication, backups, autoscaling, platform observability, and secret
 rotation belong to the selected deployment environment.
 
-## CP-03 to CP-08: release documentation and acceptance
+## CP-03: architecture documentation
 
-The final documentation layer includes the system architecture, model card,
-repository map, deployment contract, and release acceptance checklist. These
-artifacts make the ML boundary, serving boundary, monitoring policy, limitations,
-and release evidence explicit. The README is the recruiter-facing entry point;
-the detailed documents remain the engineering source of truth.
+`docs/architecture.md` records the offline ML, online serving, inventory, and
+operations boundaries plus the end-to-end system flow.
+
+## CP-04: model governance
+
+`docs/model_card.md` records intended use, historical-data limitations,
+leakage-safe target design, verified validation evidence, uncertainty semantics,
+risks, and human-review requirements.
+
+## CP-05: repository map
+
+`docs/repository_map.md` maps source, tests, runtime, operations, and generated
+artifact boundaries so reviewers can navigate the project quickly.
+
+## CP-06: recruiter-facing README
+
+The root README is the concise project entry point: business problem, verified
+metrics, architecture, methodology, production stack, monitoring policy,
+quick-start instructions, limitations, and links to engineering evidence.
+
+## CP-07: release governance
+
+`docs/release_checklist.md` defines code, container, ML-governance, and
+repository-hygiene acceptance criteria. A release/tag is intentionally deferred
+until the final checks and CI acceptance are confirmed.
+
+## CP-08: final acceptance gate
+
+Day 07 closes only after the documented quality commands, runtime health checks,
+non-root checks, and clean Git state pass on the release candidate. This avoids
+claiming completion from documentation alone.
