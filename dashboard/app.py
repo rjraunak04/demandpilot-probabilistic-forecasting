@@ -8,6 +8,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from api_client import APIError, get_forecast, health, inventory_recommendation  # noqa: E402
+
 from demandpilot.monitoring.report import summarize_drift  # noqa: E402
 
 st.set_page_config(page_title="DemandPilot", layout="wide")
