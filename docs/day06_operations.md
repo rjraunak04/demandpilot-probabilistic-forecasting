@@ -21,6 +21,10 @@ Local Compose credentials are configurable through `POSTGRES_DB`, `POSTGRES_USER
 
 The current monitoring module implements deterministic PSI-based numeric feature drift with stable/watch/drift thresholds. It is intentionally lightweight and testable without external infrastructure. CP-04 adds JSON drift summaries, optional Evidently HTML, and a Streamlit drift tab. See [day06_monitoring.md](day06_monitoring.md).
 
+## CP-05 — live decision dashboard
+
+The dashboard now uses `DEMANDPILOT_API_URL` for live service health, stored forecast lookup, and inventory recommendations. The Inventory decision tab reads forecast quantiles from FastAPI/PostgreSQL and sends the operator-provided on-hand/MOQ values to the inventory policy endpoint. API failures are surfaced as UI errors rather than crashing Streamlit. The upload-based forecast explorer remains available for offline analysis.
+
 ## Local verification
 
 Run `docker compose config`, then `docker compose up -d --build`. Verify all four services with `docker compose ps`, FastAPI `/health` and `/ready`, MLflow `/health`, PostgreSQL `pg_isready`, and Streamlit `/_stcore/health`.
