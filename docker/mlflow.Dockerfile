@@ -2,12 +2,14 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# MLflow's lightweight package exposes the CLI but does not include the web
-# server stack. Install the explicit server runtime dependencies while keeping
-# forecasting/training libraries out of this image.
+# Keep MLflow tracking-server runtime explicit and lightweight. mlflow-skinny
+# provides the CLI/core client, while Flask/Uvicorn/SQLAlchemy supply the
+# server and SQLite-backed tracking-store dependencies. Training libraries
+# intentionally stay out of this image.
 RUN pip install --no-cache-dir \
     "mlflow-skinny>=3,<4" \
     "flask>=3,<4" \
+    "sqlalchemy>=2,<3" \
     "uvicorn>=0.32,<1"
 
 EXPOSE 5000
