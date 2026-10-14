@@ -45,7 +45,7 @@ with drift_tab:
         try:
             reference = load_export(reference_file)
             current = load_export(current_file)
-            common = sorted(set(reference.select_dtypes("number")) & set(current.select_dtypes("number")))
+            common = sorted(\n                set(reference.select_dtypes("number"))\n                & set(current.select_dtypes("number"))\n            )
             selected = st.multiselect("Compare features", common, default=common)
             if selected:
                 report = summarize_drift(reference, current, columns=selected)
