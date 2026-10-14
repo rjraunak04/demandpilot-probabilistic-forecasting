@@ -8,7 +8,11 @@ from demandpilot.monitoring.alerts import evaluate_drift_alert
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("report", type=Path, help="JSON report produced by generate_drift_report.py")
+    parser.add_argument(
+        "report",
+        type=Path,
+        help="JSON report produced by generate_drift_report.py",
+    )
     parser.add_argument(
         "--fail-on",
         choices=("never", "drift", "watch"),
