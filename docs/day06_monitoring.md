@@ -1,4 +1,4 @@
-# Day-06 CP-04: Monitoring and drift reports
+# Day 06 — Monitoring and drift operations
 
 Reference and current snapshots are compared using **numeric PSI** with reference
 quantile bins. PSI < 0.10 = stable; 0.10–<0.25 = watch; >=0.25 = drift.
