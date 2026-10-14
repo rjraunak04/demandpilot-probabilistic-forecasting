@@ -27,6 +27,9 @@ dependencies = [
     "xgboost>=2.1,<4",
 ]
 
+[project.optional-dependencies]
+monitoring = ["evidently>=0.7,<1"]
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
