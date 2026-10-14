@@ -28,3 +28,10 @@ The dashboard now uses `DEMANDPILOT_API_URL` for live service health, stored for
 ## Local verification
 
 Run `docker compose config`, then `docker compose up -d --build`. Verify all four services with `docker compose ps`, FastAPI `/health` and `/ready`, MLflow `/health`, PostgreSQL `pg_isready`, and Streamlit `/_stcore/health`.
+
+
+## CP-06 — alerting and Day-06 acceptance
+
+Monitoring is actionable rather than purely visual. PSI states map to stable, watch, and drift operator decisions, and `scripts/check_drift_status.py` exposes an exit-code contract for scheduled jobs. Material drift requests investigation before retraining; it never triggers blind automatic retraining.
+
+Day-06 acceptance requires the full Python test suite, Ruff, byte-code compilation, clean Git state, and healthy Compose services. The verified CP-06 baseline contains 200 passing tests. CI/CD and external deployment automation are intentionally deferred to Day 07.
