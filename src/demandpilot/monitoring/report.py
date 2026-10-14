@@ -43,8 +43,9 @@ def save_summary(summary, path):
     """Persist JSON artifact."""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(summary, indent=2, allow_nan=False) + "
-", encoding="utf-8")
+    path.write_text(
+        json.dumps(summary, indent=2, allow_nan=False) + chr(10), encoding="utf-8"
+    )
     return path
 
 
