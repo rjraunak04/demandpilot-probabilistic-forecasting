@@ -16,7 +16,15 @@ RUN pip install --no-cache-dir \
 COPY src ./src
 COPY scripts ./scripts
 
-ENV PYTHONPATH=/app/src
+ENV PYTHONPATH=/app/src \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+RUN addgroup --system demandpilot \
+    && adduser --system --ingroup demandpilot demandpilot \
+    && chown -R demandpilot:demandpilot /app
+
+USER demandpilot
 
 EXPOSE 8000
 
